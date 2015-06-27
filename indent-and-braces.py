@@ -32,10 +32,15 @@ class IndentAndBracesCommand(sublime_plugin.TextCommand):
                 region = sublime.Region(self.view.line(r.begin()).begin(), region_end)
 
             indent = get_indentation_on_line(self.view, region.begin())
+            block = ''
+            if if_state:
+                block = 'if()'
+            elif for_state:
+                block = 'for()'
             if from_cursor:
-                insert_start = opening_brace
+                insert_start = block + opening_brace
             else:
-                insert_start = indent + opening_brace + "\n"
+                insert_start = indent + block + opening_brace + "\n"
             insert_end = '\n' + indent + closing_brace
 
             self.view.insert(edit, region.begin(), insert_start)
